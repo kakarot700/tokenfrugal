@@ -53,3 +53,13 @@ credentials or private data are included.
 
 ## Actual live-model validation (16 November 2026)
 A free local Qwen2.5-Coder-1.5B run repaired the small inventory fixture using 7 calls / 4,931 actual reported tokens. Both unchanged fixture tests passed independently. See docs/live-validation for complete evidence and limitations. This is a single development fixture, not a claim of general success or superiority. The original offline scripted demonstration remains labelled separately.
+
+## Live run on NVIDIA NIM (17 Nov 2026)
+
+`demo/live-validation/nemotron-ultra-live-audit.jsonl` is the audit trail of a real run
+against NVIDIA's own hosted model `nvidia/nemotron-3-ultra-550b-a55b` through the
+OpenAI-compatible NIM endpoint. The agent fixed the failing fixture on its own in 5 model
+calls / 3,623 tokens, and the repo's tests passed afterwards. No paid credits were used.
+
+Reasoning models spend part of the reply budget thinking, so `providers.py` now asks for at
+least 2048 reply tokens and falls back to `reasoning_content` when `content` carries no JSON.

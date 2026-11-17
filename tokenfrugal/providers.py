@@ -47,15 +47,20 @@ class OpenAICompatProvider:
     def act(self, messages, max_tokens=512):
         if not self.api_key:
             raise RuntimeError("set OPENAI_API_KEY (or use --provider scripted)")
+        # reasoning models (e.g. NVIDIA Nemotron) spend part of max_tokens thinking
+        cap = max(max_tokens, int(os.environ.get("TOKENFRUGAL_MIN_REPLY_TOKENS", "2048")))
         body = json.dumps({"model": self.model, "messages": messages,
-                           "temperature": 0, "max_tokens": max_tokens}).encode()
+                           "temperature": 0, "max_tokens": cap}).encode()
         req = urllib.request.Request(
             self.base_url + "/chat/completions", data=body,
             headers={"Content-Type": "application/json",
                      "Authorization": "Bearer " + self.api_key})
         with urllib.request.urlopen(req, timeout=self.timeout) as resp:
             data = json.loads(resp.read().decode())
-        text = data["choices"][0]["message"]["content"]
+        msg = data["choices"][0]["message"]
+        text = msg.get("content") or ""
+        if "{" not in text:
+            text = text + (msg.get("reasoning_content") or msg.get("reasoning") or "")
         self.last_usage = (data.get("usage") or {}).get("total_tokens") or 0
         return _parse_action(text)
 
