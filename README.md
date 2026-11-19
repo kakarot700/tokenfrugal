@@ -37,7 +37,7 @@ Use the CLI help for its available flags; no paid API key is bundled or required
 Provider failover, per-user dollar caps, confidential-repository routing, arbitrary
 shell/git approvals, Bifrost deployment, and a live token-savings baseline are not
 implemented or demonstrated. Bifrost can only be considered an optional compatible
-endpoint. No public GitHub repository or platform acceptance is claimed here.
+endpoint. This repository is the public source submitted to the HackCulture Global AI Hackathon (submission status: under review).
 
 Token estimation may differ from actual billing. Preflight checks are not a hard
 monetary cap; providers must enforce their own spend limits. The toolbox is NOT an
